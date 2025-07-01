@@ -1,5 +1,5 @@
 import requests
-import json
+from helpers import save_readable_json
 from dotenv import load_dotenv
 from os import getenv
 from statistics import mean
@@ -106,10 +106,6 @@ def get_popular_hh_jobs(lang_request, email):
     return popular_langs
 
 
-def save_readable_json(dictionary, filename):
-    json_string = json.dumps(dictionary, indent=4, ensure_ascii=False)
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write(json_string)
 
 
 def test_hh_jobs(email):
