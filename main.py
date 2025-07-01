@@ -1,39 +1,36 @@
 import requests
 from helpers import save_readable_json
 from dotenv import load_dotenv
-from os import getenv
+from os import getenv, environ
 from statistics import mean
 
 
 APP_NAME = 'DevmanJobParser/1.0'
 HH_PROGRAMER_ID = 96
 HH_MOSCOW_ID = 1
+SUPERJOB_PROGRAMMING_ID = 48
+SUPERJOB_MOSCOW_ID = 4
 PERIOD = None
+ACCEPTABLE_CURRENCY = ['rur', 'rub']
 LANG_REQUEST = {
         'Python': 'Python',
         'Javascript': 'Javascript',
         'Java': 'Java NOT Javascript',
+        'Kotlin': 'Kotlin',
         'Ruby': 'Ruby',
         'PHP': 'PHP',
         'C++': 'C++',
-        'C#': 'C#',
-        'C': 'C NOT C# NOT C++',
+        'C#': 'C#',        
         'Go': 'Go'
-}
-
-LANG_REQUEST_SHORT = {
-        'Python': 'Python',
-        'Javascript': 'Javascript',
-        'Java': 'Java NOT Javascript'
 }
 
 
 def predict_rub_salary(job: dict):
-    if job['salary']['currency'] != 'RUR':
+    if job['currency'].lower() not in ACCEPTABLE_CURRENCY:
         return None
 
-    salary_from = job['salary']['from']
-    salary_to = job['salary']['to']
+    salary_from = job['salary_from']
+    salary_to = job['salary_to']
 
     if not salary_from:
         salary = int(salary_to) * 1.2
@@ -50,9 +47,9 @@ def predict_rub_salary(job: dict):
 def get_salaries(jobs):
     salaries = []
     for job in jobs:
-        salary = predict_rub_salary(job)
-        if salary:
-            salaries.append(salary)
+        predicted_salary = predict_rub_salary(job)
+        if predicted_salary:
+            salaries.append(predicted_salary)
     return salaries
 
 
@@ -75,14 +72,28 @@ def get_hh_page(request_text, email, page, period):
     return response.json()
 
 
-def get_hh_job_salaries(request_text, email, period = PERIOD):
+def convert_hh_raw_jobs_to_jobs(raw_hh_jobs):
+    jobs = []
+    for raw_hh_job in raw_hh_jobs['items']:
+        job = {
+            'salary_from':raw_hh_job['salary']['from'],
+            'salary_to':raw_hh_job['salary']['to'],
+            'currency':raw_hh_job['salary']['currency']
+        }
+        jobs.append(job)
+    
+    return jobs
+
+
+def fetch_hh_job_salaries(request_text, email, period = PERIOD):
     pages = 1
     page = 0
     salaries = []
     while(page < pages):
         raw_jobs = get_hh_page(request_text, email, page, period)
-        pages = raw_jobs['pages']        
-        page_salaries = get_salaries(raw_jobs['items'])
+        pages = raw_jobs['pages']
+        jobs = convert_hh_raw_jobs_to_jobs(raw_jobs)
+        page_salaries = get_salaries(jobs)
         salaries = [*salaries, *page_salaries]
         page += 1 
 
@@ -95,34 +106,104 @@ def get_hh_job_salaries(request_text, email, period = PERIOD):
     return job_salaries
 
 
-def get_popular_hh_jobs(lang_request, email):
+def fetch_popular_hh_jobs(lang_request, email):
     popular_langs: dict = {}
 
     for lang, request in lang_request.items():
-        print(f'Загружаются вакансии для {lang}')
-        jobs = get_hh_job_salaries(request, email)
+        print(f'Загружаются вакансии c hh.ru для {lang}')
+        jobs = fetch_hh_job_salaries(request, email)
         popular_langs[lang] = jobs
        
     return popular_langs
 
 
+def convert_superjob_raw_jobs_to_jobs(raw_superjob_jobs):
+    jobs = []
+    for raw_superjob_job in raw_superjob_jobs['objects']:
+        salary_from = raw_superjob_job['payment_from']
+        salary_to = raw_superjob_job['payment_to']
+        job = {
+            'salary_from': salary_from,
+            'salary_to': salary_to,
+            'currency':raw_superjob_job['currency']
+        }
+        jobs.append(job)
+    
+    return jobs
+
+def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 1):
+    url = 'https://api.superjob.ru/2.0/vacancies'
+
+    headers = {
+        'X-Api-App-Id': token
+    }
+
+    params = {
+        'catalogues': SUPERJOB_PROGRAMMING_ID,
+        'page': page,
+        'count': per_page,
+        'no_agreement': no_agreement,
+        'keyword': keyword,
+        'town': SUPERJOB_MOSCOW_ID
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+
+    response.raise_for_status()
+
+    return response.json()
 
 
-def test_hh_jobs(email):
-    hh_jobs = get_hh_job_salaries(LANG_REQUEST['Python'], email)    
-    save_readable_json(hh_jobs, 'hh_jobs_salary.json')    
+def fetch_superjob_job_salaries(token, keyword):
+    page = 0
+    more = True
+    salaries = []
+    while(more):
+        raw_jobs = get_superjob_page(token, keyword, page)
+        more = raw_jobs['more']
+        jobs = convert_superjob_raw_jobs_to_jobs(raw_jobs)
+        page_salaries = get_salaries(jobs)
+        salaries = [*salaries, *page_salaries]
+        if not salaries:
+            average_salary = 0
+        else:
+            average_salary = int(mean(salaries))
+        page += 1 
+
+    job_salaries = {
+        'total': raw_jobs['total'],
+        'processed': len(salaries),
+        'average_salary': average_salary
+    }
+
+    return job_salaries
 
 
-def test_popular_hh_jobs(email):
-    pop_jobs = get_popular_hh_jobs(LANG_REQUEST, email)
-    save_readable_json(pop_jobs, 'pop_jobs.json')
+def fetch_popular_superjob_jobs(token, lang_request):
+    popular_langs: dict = {}
+
+    for lang in lang_request:
+        print(f'Загружаются вакансии c superjob для {lang}')
+        jobs = fetch_superjob_job_salaries(token, lang)
+        popular_langs[lang] = jobs
+       
+    return popular_langs
 
 
 def main():
     load_dotenv()
     dev_email = getenv('DEV_EMAIL', 'example@email.com')
-    test_popular_hh_jobs(dev_email)
+    superjob_token = environ['SUPERJOB_TOKEN']
+
+    print('Начало загрузки вакансий с hh.ru')
+    hh_salaries = fetch_popular_hh_jobs(LANG_REQUEST, dev_email)
+    print(f'Сохранение вакансий hh.ru в файл')
+    save_readable_json(hh_salaries, 'hh_salaries.json')
     
+    print('Начало загрузки вакансий с superjob.ru')
+    sj_salaries = fetch_popular_superjob_jobs(superjob_token, LANG_REQUEST)
+    print('Сохранение ваканский superjob.ru в файл')
+    save_readable_json(sj_salaries, 'superjob_salaries.json')
 
 
 if __name__ == '__main__':
