@@ -1,5 +1,5 @@
 import requests
-from helpers import save_readable_json
+from helpers import save_readable_json, print_as_table
 from dotenv import load_dotenv
 from os import getenv, environ
 from statistics import mean
@@ -204,6 +204,9 @@ def main():
     sj_salaries = fetch_popular_superjob_jobs(superjob_token, LANG_REQUEST)
     print('Сохранение ваканский superjob.ru в файл')
     save_readable_json(sj_salaries, 'superjob_salaries.json')
+
+    print_as_table(hh_salaries, 'hh.ru Moscow')
+    print_as_table(sj_salaries, 'SuperJob.ru Moscow')
 
 
 if __name__ == '__main__':
