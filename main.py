@@ -33,13 +33,13 @@ def predict_rub_salary(job: dict):
     salary_to = job['salary_to']
 
     if not salary_from:
-        salary = int(salary_to) * 1.2
+        salary = salary_to * 1.2
     
     elif not salary_to:
-        salary = int(salary_from) * 0.8
+        salary = salary_from * 0.8
 
     else:    
-        salary = mean([int(salary_from), int(salary_to)])
+        salary = mean([salary_from, salary_to])
     
     return int(salary)
 
@@ -97,13 +97,13 @@ def fetch_hh_job_salaries(request_text, email, period = PERIOD):
         salaries = [*salaries, *page_salaries]
         page += 1 
 
-    job_salaries = {
+    average_salaries = {
         'total': raw_jobs['found'],
         'processed': len(salaries),
         'average_salary': int(mean(salaries))
     }
 
-    return job_salaries
+    return average_salaries
 
 
 def fetch_popular_hh_jobs(lang_request, email):
@@ -170,13 +170,13 @@ def fetch_superjob_job_salaries(token, keyword):
             average_salary = int(mean(salaries))
         page += 1 
 
-    job_salaries = {
+    average_salaries = {
         'total': raw_jobs['total'],
         'processed': len(salaries),
         'average_salary': average_salary
     }
 
-    return job_salaries
+    return average_salaries
 
 
 def fetch_popular_superjob_jobs(token, lang_request):
