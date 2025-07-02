@@ -106,7 +106,7 @@ def fetch_hh_job_salaries(request_text, email, period = PERIOD):
     return average_salaries
 
 
-def fetch_popular_hh_jobs(lang_request, email):
+def fetch_salary_stats_for_hh_vacancies(lang_request, email):
     popular_langs: dict = {}
 
     for lang, request in lang_request.items():
@@ -179,7 +179,7 @@ def fetch_superjob_job_salaries(token, keyword):
     return average_salaries
 
 
-def fetch_popular_superjob_jobs(token, lang_request):
+def fetch_salary_stats_from_superjob_vacancies(token, lang_request):
     popular_langs: dict = {}
 
     for lang in lang_request:
@@ -196,11 +196,11 @@ def main():
     superjob_token = environ['SUPERJOB_TOKEN']
 
     print('Начало загрузки вакансий с hh.ru')
-    hh_salaries = fetch_popular_hh_jobs(LANG_REQUEST, dev_email)
+    hh_salaries = fetch_salary_stats_for_hh_vacancies(LANG_REQUEST, dev_email)
     print(f'Сохранение вакансий hh.ru в файл')
     
     print('Начало загрузки вакансий с superjob.ru')
-    sj_salaries = fetch_popular_superjob_jobs(superjob_token, LANG_REQUEST)
+    sj_salaries = fetch_salary_stats_from_superjob_vacancies(superjob_token, LANG_REQUEST)
     print('Сохранение ваканский superjob.ru в файл')
 
     print_as_table(hh_salaries, 'hh.ru Moscow')
