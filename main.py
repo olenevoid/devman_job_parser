@@ -53,13 +53,13 @@ def get_predicted_salaries(salaries):
     return predicted_salaries
 
 
-def get_hh_page(request_text, email, page, period, with_salary = True):
+def get_hh_page(searching_pattern, email, page, period, with_salary = True):
     url = 'https://api.hh.ru/vacancies'
     params = {
         'professional_role': HH_PROGRAMER_ID,
         'area': HH_MOSCOW_ID,
         'period': period,
-        'text': request_text,
+        'text': searching_pattern,
         'only_with_salary': with_salary,
         'page': page
     }
@@ -85,12 +85,12 @@ def get_salary_details_from_hh_vacancies(hh_vacancies):
     return salaries
 
 
-def fetch_hh_average_salary(request_text, email, period = PERIOD):
+def fetch_hh_average_salary(searching_pattern, email, period = PERIOD):
     pages = 1
     page = 0
     predicted_hh_salaries = []
     while(page < pages):
-        hh_vacancies = get_hh_page(request_text, email, page, period)
+        hh_vacancies = get_hh_page(searching_pattern, email, page, period)
         pages = hh_vacancies['pages']
         salaries = get_salary_details_from_hh_vacancies(hh_vacancies)
         predicted_hh_salaries.extend(get_predicted_salaries(salaries))
@@ -105,12 +105,12 @@ def fetch_hh_average_salary(request_text, email, period = PERIOD):
     return average_salary_stats
 
 
-def fetch_salary_stats_for_hh_vacancies(lang_request, email):
+def fetch_salary_stats_for_hh_vacancies(searching_patterns, email):
     salary_stats_for_languages: dict = {}
 
-    for lang, request in lang_request.items():
+    for lang, pattern in searching_patterns.items():
         print(f'Загружаются вакансии c hh.ru для {lang}')
-        salary_stats = fetch_hh_average_salary(request, email)
+        salary_stats = fetch_hh_average_salary(pattern, email)
         salary_stats_for_languages[lang] = salary_stats
        
     return salary_stats_for_languages
@@ -176,10 +176,10 @@ def fetch_superjob_average_salary(token, keyword):
     return average_salary_stats
 
 
-def fetch_salary_stats_from_superjob_vacancies(token, lang_request):
+def fetch_salary_stats_from_superjob_vacancies(token, languages):
     salary_stats_for_languages: dict = {}
 
-    for lang in lang_request:
+    for lang in languages:
         print(f'Загружаются вакансии c superjob для {lang}')
         salary_stats = fetch_superjob_average_salary(token, lang)
         salary_stats_for_languages[lang] = salary_stats
