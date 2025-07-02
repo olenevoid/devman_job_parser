@@ -53,14 +53,14 @@ def get_predicted_salaries(salaries):
     return predicted_salaries
 
 
-def get_hh_page(request_text, email, page, period):
+def get_hh_page(request_text, email, page, period, with_salary = True):
     url = 'https://api.hh.ru/vacancies'
     params = {
         'professional_role': HH_PROGRAMER_ID,
         'area': HH_MOSCOW_ID,
         'period': period,
         'text': request_text,
-        'only_with_salary': True,
+        'only_with_salary': with_salary,
         'page': page
     }
     headers = {'User-Agent': f'{APP_NAME} ({email})'}
