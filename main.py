@@ -85,7 +85,7 @@ def get_salary_details_from_hh_vacancies(hh_vacancies):
     return salaries
 
 
-def fetch_hh_salaries(request_text, email, period = PERIOD):
+def fetch_hh_average_salary(request_text, email, period = PERIOD):
     pages = 1
     page = 0
     predicted_hh_salaries = []
@@ -110,7 +110,7 @@ def fetch_salary_stats_for_hh_vacancies(lang_request, email):
 
     for lang, request in lang_request.items():
         print(f'Загружаются вакансии c hh.ru для {lang}')
-        jobs = fetch_hh_salaries(request, email)
+        jobs = fetch_hh_average_salary(request, email)
         popular_langs[lang] = jobs
        
     return popular_langs
