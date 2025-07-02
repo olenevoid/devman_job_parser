@@ -96,13 +96,13 @@ def fetch_hh_salaries(request_text, email, period = PERIOD):
         predicted_hh_salaries.extend(get_predicted_salaries(salaries))
         page += 1 
 
-    average_salaries = {
+    average_salary_stats = {
         'total': hh_vacancies['found'],
         'processed': len(predicted_hh_salaries),
         'average_salary': int(mean(predicted_hh_salaries))
     }
 
-    return average_salaries
+    return average_salary_stats
 
 
 def fetch_salary_stats_for_hh_vacancies(lang_request, email):
@@ -167,13 +167,13 @@ def fetch_superjob_salaries(token, keyword):
             average_salary = int(mean(predicted_salaries))
         page += 1 
 
-    average_salaries = {
+    average_salary_stats = {
         'total': vacancies['total'],
         'processed': len(predicted_salaries),
         'average_salary': average_salary
     }
 
-    return average_salaries
+    return average_salary_stats
 
 
 def fetch_salary_stats_from_superjob_vacancies(token, lang_request):
