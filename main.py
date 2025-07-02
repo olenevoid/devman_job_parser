@@ -85,7 +85,7 @@ def convert_hh_raw_jobs_to_jobs(raw_hh_jobs):
     return jobs
 
 
-def fetch_hh_job_salaries(request_text, email, period = PERIOD):
+def fetch_hh_salaries(request_text, email, period = PERIOD):
     pages = 1
     page = 0
     salaries = []
@@ -111,7 +111,7 @@ def fetch_salary_stats_for_hh_vacancies(lang_request, email):
 
     for lang, request in lang_request.items():
         print(f'Загружаются вакансии c hh.ru для {lang}')
-        jobs = fetch_hh_job_salaries(request, email)
+        jobs = fetch_hh_salaries(request, email)
         popular_langs[lang] = jobs
        
     return popular_langs
