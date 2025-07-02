@@ -73,16 +73,16 @@ def get_hh_page(request_text, email, page, period):
 
 
 def get_salary_details_from_hh_vacancies(hh_vacancies):
-    jobs = []
+    salaries = []
     for hh_vacancy in hh_vacancies['items']:
-        job = {
+        salary = {
             'salary_from':hh_vacancy['salary']['from'],
             'salary_to':hh_vacancy['salary']['to'],
             'currency':hh_vacancy['salary']['currency']
         }
-        jobs.append(job)
+        salaries.append(salary)
     
-    return jobs
+    return salaries
 
 
 def fetch_hh_salaries(request_text, email, period = PERIOD):
