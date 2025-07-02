@@ -160,8 +160,7 @@ def fetch_superjob_salaries(token, keyword):
         vacancies = get_superjob_page(token, keyword, page)
         more = vacancies['more']
         salaries = get_salary_details_from_superjob_vacancies(vacancies)
-        page_salaries = get_predicted_salaries(salaries)
-        predicted_salaries.extend(page_salaries)
+        predicted_salaries.extend(get_predicted_salaries(salaries))
         if not predicted_salaries:
             average_salary = 0
         else:
