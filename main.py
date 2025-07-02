@@ -12,7 +12,7 @@ SUPERJOB_PROGRAMMING_ID = 48
 SUPERJOB_MOSCOW_ID = 4
 PERIOD = None
 ACCEPTABLE_CURRENCY = ['rur', 'rub']
-LANG_REQUEST = {
+SEARCHING_PATTERNS_FOR_LANGUAGES = {
         'Python': 'Python',
         'Javascript': 'Javascript',
         'Java': 'Java NOT Javascript',
@@ -193,13 +193,16 @@ def main():
     superjob_token = environ['SUPERJOB_TOKEN']
 
     print('Начало загрузки вакансий с hh.ru')
-    hh_salaries = fetch_salary_stats_for_hh_vacancies(LANG_REQUEST, dev_email)
+    hh_salaries = fetch_salary_stats_for_hh_vacancies(
+        SEARCHING_PATTERNS_FOR_LANGUAGES,
+        dev_email
+    )
     print(f'Сохранение вакансий hh.ru в файл')
     
     print('Начало загрузки вакансий с superjob.ru')
     sj_salaries = fetch_salary_stats_from_superjob_vacancies(
         superjob_token,
-        LANG_REQUEST
+        SEARCHING_PATTERNS_FOR_LANGUAGES
     )
     print('Сохранение ваканский superjob.ru в файл')
 
