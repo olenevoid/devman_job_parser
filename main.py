@@ -90,15 +90,15 @@ def fetch_hh_job_salaries(request_text, email, period = PERIOD):
     page = 0
     salaries = []
     while(page < pages):
-        raw_jobs = get_hh_page(request_text, email, page, period)
-        pages = raw_jobs['pages']
-        jobs = convert_hh_raw_jobs_to_jobs(raw_jobs)
+        hh_vacancies = get_hh_page(request_text, email, page, period)
+        pages = hh_vacancies['pages']
+        jobs = convert_hh_raw_jobs_to_jobs(hh_vacancies)
         page_salaries = get_salaries(jobs)
         salaries.extend(page_salaries)
         page += 1 
 
     average_salaries = {
-        'total': raw_jobs['found'],
+        'total': hh_vacancies['found'],
         'processed': len(salaries),
         'average_salary': int(mean(salaries))
     }
