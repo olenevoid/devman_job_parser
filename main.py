@@ -44,13 +44,13 @@ def predict_rub_salary(salary_details: dict):
     return int(salary)
 
 
-def get_salaries(jobs):
-    salaries = []
+def get_predicted_salaries(jobs):
+    predicted_salaries = []
     for job in jobs:
         predicted_salary = predict_rub_salary(job)
         if predicted_salary:
-            salaries.append(predicted_salary)
-    return salaries
+            predicted_salaries.append(predicted_salary)
+    return predicted_salaries
 
 
 def get_hh_page(request_text, email, page, period):
@@ -93,7 +93,7 @@ def fetch_hh_salaries(request_text, email, period = PERIOD):
         hh_vacancies = get_hh_page(request_text, email, page, period)
         pages = hh_vacancies['pages']
         jobs = get_salary_details_from_hh_vacancies(hh_vacancies)
-        page_salaries = get_salaries(jobs)
+        page_salaries = get_predicted_salaries(jobs)
         salaries.extend(page_salaries)
         page += 1 
 
@@ -161,7 +161,7 @@ def fetch_superjob_salaries(token, keyword):
         superjob_salaries = get_superjob_page(token, keyword, page)
         more = superjob_salaries['more']
         jobs = get_salary_details_from_superjob_vacancies(superjob_salaries)
-        page_salaries = get_salaries(jobs)
+        page_salaries = get_predicted_salaries(jobs)
         salaries.extend(page_salaries)
         if not salaries:
             average_salary = 0
