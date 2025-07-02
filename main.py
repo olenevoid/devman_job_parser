@@ -88,19 +88,18 @@ def get_salary_details_from_hh_vacancies(hh_vacancies):
 def fetch_hh_salaries(request_text, email, period = PERIOD):
     pages = 1
     page = 0
-    salaries = []
+    predicted_hh_salaries = []
     while(page < pages):
         hh_vacancies = get_hh_page(request_text, email, page, period)
         pages = hh_vacancies['pages']
-        jobs = get_salary_details_from_hh_vacancies(hh_vacancies)
-        page_salaries = get_predicted_salaries(jobs)
-        salaries.extend(page_salaries)
+        salaries = get_salary_details_from_hh_vacancies(hh_vacancies)
+        predicted_hh_salaries.extend(get_predicted_salaries(salaries))
         page += 1 
 
     average_salaries = {
         'total': hh_vacancies['found'],
-        'processed': len(salaries),
-        'average_salary': int(mean(salaries))
+        'processed': len(predicted_hh_salaries),
+        'average_salary': int(mean(predicted_hh_salaries))
     }
 
     return average_salaries
