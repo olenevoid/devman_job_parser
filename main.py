@@ -72,13 +72,13 @@ def get_hh_page(request_text, email, page, period):
     return response.json()
 
 
-def get_salary_details_from_hh_vacancies(raw_hh_jobs):
+def get_salary_details_from_hh_vacancies(hh_vacancies):
     jobs = []
-    for raw_hh_job in raw_hh_jobs['items']:
+    for hh_vacancy in hh_vacancies['items']:
         job = {
-            'salary_from':raw_hh_job['salary']['from'],
-            'salary_to':raw_hh_job['salary']['to'],
-            'currency':raw_hh_job['salary']['currency']
+            'salary_from':hh_vacancy['salary']['from'],
+            'salary_to':hh_vacancy['salary']['to'],
+            'currency':hh_vacancy['salary']['currency']
         }
         jobs.append(job)
     
