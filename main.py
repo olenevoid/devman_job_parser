@@ -94,7 +94,7 @@ def fetch_hh_job_salaries(request_text, email, period = PERIOD):
         pages = raw_jobs['pages']
         jobs = convert_hh_raw_jobs_to_jobs(raw_jobs)
         page_salaries = get_salaries(jobs)
-        salaries = [*salaries, *page_salaries]
+        salaries.extend(page_salaries)
         page += 1 
 
     average_salaries = {
@@ -163,7 +163,7 @@ def fetch_superjob_job_salaries(token, keyword):
         more = raw_jobs['more']
         jobs = convert_superjob_raw_jobs_to_jobs(raw_jobs)
         page_salaries = get_salaries(jobs)
-        salaries = [*salaries, *page_salaries]
+        salaries.extend(page_salaries)
         if not salaries:
             average_salary = 0
         else:
