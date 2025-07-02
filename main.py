@@ -25,12 +25,12 @@ LANG_REQUEST = {
 }
 
 
-def predict_rub_salary(job: dict):
-    if job['currency'].lower() not in ACCEPTABLE_CURRENCY:
+def predict_rub_salary(salary_details: dict):
+    if salary_details['currency'].lower() not in ACCEPTABLE_CURRENCY:
         return None
 
-    salary_from = job['salary_from']
-    salary_to = job['salary_to']
+    salary_from = salary_details['salary_from']
+    salary_to = salary_details['salary_to']
 
     if not salary_from:
         salary = salary_to * 1.2
