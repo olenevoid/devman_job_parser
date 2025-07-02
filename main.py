@@ -118,18 +118,19 @@ def fetch_salary_stats_for_hh_vacancies(lang_request, email):
 
 
 def get_salary_details_from_superjob_vacancies(superjob_vacancies):
-    jobs = []
+    salaries = []
     for superjob_vacancy in superjob_vacancies['objects']:
         salary_from = superjob_vacancy['payment_from']
         salary_to = superjob_vacancy['payment_to']
-        job = {
+        salary = {
             'salary_from': salary_from,
             'salary_to': salary_to,
             'currency':superjob_vacancy['currency']
         }
-        jobs.append(job)
+        salaries.append(salary)
     
-    return jobs
+    return salaries
+
 
 def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 1):
     url = 'https://api.superjob.ru/2.0/vacancies'
