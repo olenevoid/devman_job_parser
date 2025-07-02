@@ -117,7 +117,7 @@ def fetch_salary_stats_for_hh_vacancies(lang_request, email):
     return popular_langs
 
 
-def convert_superjob_raw_jobs_to_jobs(raw_superjob_jobs):
+def get_salary_details_from_superjob_vacancies(raw_superjob_jobs):
     jobs = []
     for raw_superjob_job in raw_superjob_jobs['objects']:
         salary_from = raw_superjob_job['payment_from']
@@ -161,7 +161,7 @@ def fetch_superjob_salaries(token, keyword):
     while(more):
         superjob_salaries = get_superjob_page(token, keyword, page)
         more = superjob_salaries['more']
-        jobs = convert_superjob_raw_jobs_to_jobs(superjob_salaries)
+        jobs = get_salary_details_from_superjob_vacancies(superjob_salaries)
         page_salaries = get_salaries(jobs)
         salaries.extend(page_salaries)
         if not salaries:
