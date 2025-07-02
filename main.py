@@ -72,7 +72,7 @@ def get_hh_page(request_text, email, page, period):
     return response.json()
 
 
-def convert_hh_raw_jobs_to_jobs(raw_hh_jobs):
+def get_salary_details_from_hh_vacancies(raw_hh_jobs):
     jobs = []
     for raw_hh_job in raw_hh_jobs['items']:
         job = {
@@ -92,7 +92,7 @@ def fetch_hh_salaries(request_text, email, period = PERIOD):
     while(page < pages):
         hh_vacancies = get_hh_page(request_text, email, page, period)
         pages = hh_vacancies['pages']
-        jobs = convert_hh_raw_jobs_to_jobs(hh_vacancies)
+        jobs = get_salary_details_from_hh_vacancies(hh_vacancies)
         page_salaries = get_salaries(jobs)
         salaries.extend(page_salaries)
         page += 1 
