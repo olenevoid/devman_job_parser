@@ -44,10 +44,10 @@ def predict_rub_salary(salary_details: dict):
     return int(salary)
 
 
-def get_predicted_salaries(jobs):
+def get_predicted_salaries(salaries):
     predicted_salaries = []
-    for job in jobs:
-        predicted_salary = predict_rub_salary(job)
+    for salary in salaries:
+        predicted_salary = predict_rub_salary(salary)
         if predicted_salary:
             predicted_salaries.append(predicted_salary)
     return predicted_salaries
