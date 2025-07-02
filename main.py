@@ -154,7 +154,7 @@ def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 1):
     return response.json()
 
 
-def fetch_superjob_job_salaries(token, keyword):
+def fetch_superjob_salaries(token, keyword):
     page = 0
     more = True
     salaries = []
@@ -184,7 +184,7 @@ def fetch_salary_stats_from_superjob_vacancies(token, lang_request):
 
     for lang in lang_request:
         print(f'Загружаются вакансии c superjob для {lang}')
-        jobs = fetch_superjob_job_salaries(token, lang)
+        jobs = fetch_superjob_salaries(token, lang)
         popular_langs[lang] = jobs
        
     return popular_langs
