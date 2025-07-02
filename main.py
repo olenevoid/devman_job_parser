@@ -155,22 +155,22 @@ def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 1):
 def fetch_superjob_salaries(token, keyword):
     page = 0
     more = True
-    salaries = []
+    predicted_salaries = []
     while(more):
         superjob_salaries = get_superjob_page(token, keyword, page)
         more = superjob_salaries['more']
         jobs = get_salary_details_from_superjob_vacancies(superjob_salaries)
         page_salaries = get_predicted_salaries(jobs)
-        salaries.extend(page_salaries)
-        if not salaries:
+        predicted_salaries.extend(page_salaries)
+        if not predicted_salaries:
             average_salary = 0
         else:
-            average_salary = int(mean(salaries))
+            average_salary = int(mean(predicted_salaries))
         page += 1 
 
     average_salaries = {
         'total': superjob_salaries['total'],
-        'processed': len(salaries),
+        'processed': len(predicted_salaries),
         'average_salary': average_salary
     }
 
