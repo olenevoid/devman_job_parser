@@ -106,14 +106,14 @@ def fetch_hh_average_salary(request_text, email, period = PERIOD):
 
 
 def fetch_salary_stats_for_hh_vacancies(lang_request, email):
-    popular_langs: dict = {}
+    salary_stats_for_languages: dict = {}
 
     for lang, request in lang_request.items():
         print(f'Загружаются вакансии c hh.ru для {lang}')
-        jobs = fetch_hh_average_salary(request, email)
-        popular_langs[lang] = jobs
+        salary_stats = fetch_hh_average_salary(request, email)
+        salary_stats_for_languages[lang] = salary_stats
        
-    return popular_langs
+    return salary_stats_for_languages
 
 
 def get_salary_details_from_superjob_vacancies(superjob_vacancies):
@@ -177,14 +177,14 @@ def fetch_superjob_average_salary(token, keyword):
 
 
 def fetch_salary_stats_from_superjob_vacancies(token, lang_request):
-    popular_langs: dict = {}
+    salary_stats_for_languages: dict = {}
 
     for lang in lang_request:
         print(f'Загружаются вакансии c superjob для {lang}')
-        jobs = fetch_superjob_average_salary(token, lang)
-        popular_langs[lang] = jobs
+        salary_stats = fetch_superjob_average_salary(token, lang)
+        salary_stats_for_languages[lang] = salary_stats
        
-    return popular_langs
+    return salary_stats_for_languages
 
 
 def main():
