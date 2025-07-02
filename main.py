@@ -152,7 +152,7 @@ def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 1):
     return response.json()
 
 
-def fetch_superjob_salaries(token, keyword):
+def fetch_superjob_average_salary(token, keyword):
     page = 0
     more = True
     predicted_salaries = []
@@ -181,7 +181,7 @@ def fetch_salary_stats_from_superjob_vacancies(token, lang_request):
 
     for lang in lang_request:
         print(f'Загружаются вакансии c superjob для {lang}')
-        jobs = fetch_superjob_salaries(token, lang)
+        jobs = fetch_superjob_average_salary(token, lang)
         popular_langs[lang] = jobs
        
     return popular_langs
@@ -197,7 +197,10 @@ def main():
     print(f'Сохранение вакансий hh.ru в файл')
     
     print('Начало загрузки вакансий с superjob.ru')
-    sj_salaries = fetch_salary_stats_from_superjob_vacancies(superjob_token, LANG_REQUEST)
+    sj_salaries = fetch_salary_stats_from_superjob_vacancies(
+        superjob_token,
+        LANG_REQUEST
+    )
     print('Сохранение ваканский superjob.ru в файл')
 
     print_as_table(hh_salaries, 'hh.ru Moscow')
