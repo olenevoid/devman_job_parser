@@ -119,12 +119,10 @@ def fetch_salary_stats_for_hh_vacancies(lang_request, email):
 
 def get_salary_details_from_superjob_vacancies(superjob_vacancies):
     salaries = []
-    for superjob_vacancy in superjob_vacancies['objects']:
-        salary_from = superjob_vacancy['payment_from']
-        salary_to = superjob_vacancy['payment_to']
+    for superjob_vacancy in superjob_vacancies['objects']:        
         salary = {
-            'salary_from': salary_from,
-            'salary_to': salary_to,
+            'salary_from': superjob_vacancy['payment_from'],
+            'salary_to': superjob_vacancy['payment_to'],
             'currency':superjob_vacancy['currency']
         }
         salaries.append(salary)
