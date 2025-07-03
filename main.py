@@ -89,7 +89,7 @@ def fetch_hh_average_salary(searching_pattern, email, period = PERIOD):
     pages = 1
     page = 0
     predicted_hh_salaries = []
-    while(page < pages):
+    while page < pages:
         hh_vacancies = get_hh_page(searching_pattern, email, page, period)
         pages = hh_vacancies['pages']
         salaries = get_salary_details_from_hh_vacancies(hh_vacancies)
@@ -156,7 +156,7 @@ def fetch_superjob_average_salary(token, keyword):
     page = 0
     more = True
     predicted_salaries = []
-    while(more):
+    while more:
         vacancies = get_superjob_page(token, keyword, page)
         more = vacancies['more']
         salaries = get_salary_details_from_superjob_vacancies(vacancies)
