@@ -169,11 +169,12 @@ def fetch_superjob_average_salary(token, keyword):
         more = vacancies['more']
         salaries = get_salary_details_from_superjob_vacancies(vacancies)
         predicted_salaries.extend(get_predicted_salaries(salaries))
-        if not predicted_salaries:
-            average_salary = 0
-        else:
-            average_salary = int(mean(predicted_salaries))
         page += 1 
+
+    if not predicted_salaries:
+        average_salary = 0
+    else:
+        average_salary = int(mean(predicted_salaries))
 
     average_salary_stats = {
         'total': vacancies['total'],
