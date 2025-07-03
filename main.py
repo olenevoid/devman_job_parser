@@ -137,7 +137,7 @@ def get_salary_details_from_superjob_vacancies(superjob_vacancies):
     return salaries
 
 
-def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 1):
+def get_superjob_page(token, keyword, page, per_page = 5, no_agreement = 0):
     url = 'https://api.superjob.ru/2.0/vacancies'
 
     headers = {
