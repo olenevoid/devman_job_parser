@@ -4,7 +4,7 @@ from terminaltables import AsciiTable
 def print_as_table(salaries, title):
     table_headers = [
         'Язык программирования',
-        'Вакансий с зарплатой',
+        'Вакансий всего',
         'Вакансий обработано',
         'Средняя зарплата'
     ]
