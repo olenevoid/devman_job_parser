@@ -96,8 +96,16 @@ def fetch_hh_average_salary(searching_pattern, email, period = PERIOD):
         predicted_hh_salaries.extend(get_predicted_salaries(salaries))
         page += 1 
 
+    page_for_total_vacancies = get_hh_page(
+        searching_pattern,
+        email,
+        page,
+        period,
+        with_salary=False
+    )
+
     average_salary_stats = {
-        'total': hh_vacancies['found'],
+        'total': page_for_total_vacancies['found'],
         'processed': len(predicted_hh_salaries),
         'average_salary': int(mean(predicted_hh_salaries))
     }
