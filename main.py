@@ -99,7 +99,7 @@ def fetch_hh_average_salary(searching_pattern, email, period = PERIOD):
     page_for_total_vacancies = get_hh_page(
         searching_pattern,
         email,
-        page,
+        0,
         period,
         with_salary=False
     )
