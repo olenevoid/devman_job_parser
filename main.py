@@ -205,14 +205,12 @@ def main():
         SEARCHING_PATTERNS_FOR_LANGUAGES,
         dev_email
     )
-    print(f'Сохранение вакансий hh.ru в файл')
     
     print('Начало загрузки вакансий с superjob.ru')
     sj_salaries = fetch_salary_stats_from_superjob_vacancies(
         superjob_token,
         SEARCHING_PATTERNS_FOR_LANGUAGES
     )
-    print('Сохранение ваканский superjob.ru в файл')
 
     print_as_table(hh_salaries, 'hh.ru Moscow')
     print_as_table(sj_salaries, 'SuperJob.ru Moscow')
